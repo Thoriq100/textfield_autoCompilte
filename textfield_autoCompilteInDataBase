@@ -1,0 +1,66 @@
+//db yg mau di auto di taruh di initComponen
+
+ArrayList id_bahanArrayList
+  
+  public void db_id_bahan(){
+      try {
+          db.connect();
+          stm = db.getConnection().createStatement();
+          String sql = "select * from bahan_baku";
+          rs = stm.executeQuery(sql);
+          while (rs.next()) {
+              String idauto = rs.getString("id_bahan_baku");
+              id_bahanArrayList.add(idauto);
+          }
+      } catch (Exception e) {
+      }
+ }
+
+//method autocomlplite
+public void autoCompliteCaribahan(String txt){
+      String complite = "";
+      int start = txt.length();
+      int last = txt.length();
+      int a;
+      for (a = 0; a < id_bahanArrayList.size(); a++) {
+          if (id_bahanArrayList.get(a).toString().startsWith(txt)) {
+              complite = id_bahanArrayList.get(a).toString();
+              last = complite.length();
+              break;
+          };
+      };
+      if (last > start) {
+          tf_cari_bahan.setText(complite);
+          tf_cari_bahan.setCaretPosition(last);
+          tf_cari_bahan.moveCaretPosition(start);
+      }
+     
+  }
+
+//event keyPressed textfield
+
+private void tf_cari_bahanKeyPressed(java.awt.event.KeyEvent evt) {                                         
+        // TODO add your handling code here:
+        switch (evt.getKeyCode()) {
+            case KeyEvent.VK_BACK_SPACE:
+                break;
+            case KeyEvent.VK_ENTER:
+                tf_cari_bahan.setText(tf_cari_bahan.getText());
+                break;
+            default:
+                EventQueue.invokeLater(new Runnable() {
+                    
+                    @Override
+                    public void run() {
+                        String txt = tf_cari_bahan.getText();
+                        autoCompliteCaribahan(txt);
+                    }
+                    
+                });
+        }
+    }           
+
+
+
+
+
